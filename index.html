@@ -21,21 +21,74 @@
       color: var(--ink);
       background: #e8edef;
       font: 15px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      height: 100svh;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr);
     }
     header {
-      padding: 24px clamp(18px, 4vw, 56px);
+      padding: 8px clamp(16px, 3vw, 40px);
       color: white;
       background: #18343a;
     }
-    header h1 { margin: 0 0 4px; font-size: clamp(23px, 3vw, 34px); }
+    header h1 { margin: 0; font-size: clamp(19px, 2vw, 25px); line-height: 1.2; }
     header p { margin: 0; color: #d6e4e5; }
+    .toolbar {
+      display: flex;
+      align-items: end;
+      gap: 12px 18px;
+      width: min(1500px, calc(100% - 32px));
+      margin: 10px auto;
+      padding: 10px 14px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: 0 5px 18px #16333d12;
+    }
+    .tool-group { display: grid; gap: 4px; min-width: 0; }
+    .tool-group .label, .tool-group label { margin: 0; font-size: 12px; }
+    .scale-group { flex: 0 0 230px; }
+    .scale-inputs { display: flex; align-items: center; gap: 8px; }
+    .scale-inputs input[type="range"] { width: 135px; min-width: 0; flex: 0 0 135px; }
+    .scale-inputs .slider-number { flex: 0 0 58px; width: 58px; padding-inline: 5px; }
+    .dimension-group {
+      grid-template-columns: repeat(2, minmax(135px, 1fr));
+      flex: 0 0 310px;
+      gap: 6px;
+      padding: 8px 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .dimension-group .label { grid-column: 1 / -1; }
+    .dimension-group .slider-value { grid-column: 1 / -1; }
+    .dimension-group .slider-row { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 5px; padding: 5px; background: white; border: 1px solid #b9c8ce; border-radius: 5px; }
+    .dimension-group .slider-row label { font-size: 11px; color: var(--muted); }
+    .dimension-group .slider-number { padding: 3px 4px; border: 0; border-radius: 0; }
+    .choice-group {
+      flex: 0 0 165px;
+      align-self: stretch;
+      gap: 6px;
+      padding: 8px 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .choice-group > .label { display: flex; align-items: center; height: 16px; }
+    .choice-group select, .checkbox-label {
+      height: 36px;
+      border-color: #b9c8ce;
+      background: white;
+    }
+    .checkbox-label { display: flex !important; align-items: center; gap: 7px; padding: 0 9px; border: 1px solid; border-radius: 5px; white-space: nowrap; cursor: pointer; }
+    .checkbox-label input { accent-color: var(--accent); }
     main {
       display: grid;
-      grid-template-columns: minmax(270px, 350px) minmax(0, 1fr);
-      gap: 24px;
-      max-width: 1500px;
-      margin: 24px auto;
-      padding: 0 20px;
+      grid-template-columns: minmax(250px, 310px) minmax(0, 1fr);
+      gap: 14px;
+      width: min(1500px, calc(100% - 32px));
+      min-height: 0;
+      margin: 0 auto 12px;
     }
     .controls, .preview-panel {
       background: white;
@@ -43,7 +96,7 @@
       border-radius: 12px;
       box-shadow: 0 5px 18px #16333d12;
     }
-    .controls { padding: 18px; align-self: start; }
+    .controls { display: flex; flex-direction: column; min-height: 0; padding: 14px; }
     label, .label { display: block; margin-bottom: 7px; font-weight: 700; }
     input[type="search"] {
       width: 100%;
@@ -53,19 +106,11 @@
       font: inherit;
     }
     .actions { display: flex; gap: 8px; margin: 12px 0; }
-    .size-controls {
-      display: grid;
-      gap: 10px;
-      margin: 14px 0;
-      padding: 12px;
-      background: var(--panel);
-      border-radius: 7px;
-    }
     .slider-row { display: grid; gap: 6px; }
     .slider-row label { margin: 0; font-size: 13px; }
     .slider-row input[type="range"] { width: 100%; min-width: 0; accent-color: var(--accent); }
     .slider-number { width: 100%; padding: 7px 8px; border: 1px solid #b9c8ce; border-radius: 5px; font: inherit; }
-    .slider-row select { width: 100%; padding: 7px 8px; border: 1px solid #b9c8ce; border-radius: 5px; font: inherit; background: white; }
+    select { width: 100%; padding: 7px 8px; border: 1px solid #b9c8ce; border-radius: 5px; font: inherit; background: white; }
     .slider-value { color: var(--muted); font-size: 12px; }
     button {
       border: 0;
@@ -79,10 +124,18 @@
     }
     button.secondary { color: var(--ink); background: #e5edef; }
     button:hover { filter: brightness(.94); }
+    .export-actions { display: flex; align-items: stretch; }
+    .export-actions > button { border-radius: 7px 0 0 7px; }
+    .export-menu { position: relative; }
+    .export-menu summary { display: flex; align-items: center; height: 100%; padding: 10px 9px; color: white; background: var(--accent); border-left: 1px solid #ffffff66; border-radius: 0 7px 7px 0; font-weight: 700; cursor: pointer; list-style: none; }
+    .export-menu summary::-webkit-details-marker { display: none; }
+    .export-dropdown { position: absolute; z-index: 2; right: 0; top: calc(100% + 5px); min-width: 145px; padding: 5px; background: white; border: 1px solid var(--line); border-radius: 7px; box-shadow: 0 5px 18px #16333d24; }
+    .export-dropdown button { width: 100%; color: var(--ink); background: transparent; text-align: left; }
     .count { color: var(--muted); font-size: 13px; }
     .country-list {
-      max-height: 62vh;
-      margin-top: 11px;
+      flex: 1;
+      min-height: 0;
+      margin-top: 10px;
       overflow: auto;
       border: 1px solid var(--line);
       border-radius: 7px;
@@ -99,35 +152,43 @@
     .country:hover { background: var(--panel); }
     .country input { accent-color: var(--accent); }
     .country img { width: 25px; height: 25px; object-fit: cover; flex: 0 0 auto; }
-    .preview-panel { min-width: 0; padding: clamp(12px, 2vw, 25px); }
+    .preview-panel { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding: clamp(10px, 1.5vw, 18px); }
     .preview-heading {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 13px;
+      margin-bottom: 8px;
     }
     .preview-heading h2 { margin: 0; font-size: 18px; }
     .poster-wrap {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      max-height: calc(100vh - 160px);
-      overflow: auto;
-      padding: 10px;
+      overflow: hidden;
+      padding: 8px;
       background: #dce4e6;
       border-radius: 7px;
     }
     #poster {
       display: block;
-      width: min(100%, 1000px);
-      height: auto;
-      margin: auto;
+      width: auto;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
       background: white;
     }
-    .help { margin: 13px 0 0; color: var(--muted); font-size: 13px; }
+    .help { display: none; }
     @media (max-width: 850px) {
+      body { height: auto; min-height: 100svh; overflow: auto; }
+      .toolbar { flex-wrap: wrap; }
       main { grid-template-columns: 1fr; }
-      .country-list { max-height: 34vh; }
+      .controls { min-height: 340px; }
+      .preview-panel { min-height: 430px; }
     }
   </style>
 </head>
@@ -135,6 +196,40 @@
   <header>
     <h1>RISE Flag Border Generator</h1>
   </header>
+  <section class="toolbar" aria-label="Poster options">
+    <div class="tool-group scale-group">
+      <label for="flagScale">Global flag scale</label>
+      <div class="scale-inputs">
+        <input id="flagScale" type="range" min="25" max="800" value="100" step="0.1">
+        <input id="flagScaleNumber" class="slider-number" type="number" min="25" max="800" value="100" step="0.1" aria-label="Scale percentage">
+      </div>
+      <output id="flagScaleValue" class="slider-value" for="flagScale">100% · 245 × 184 px</output>
+    </div>
+    <div class="tool-group dimension-group" aria-label="Poster size controls">
+      <div class="label">Final poster size</div>
+      <div class="slider-row">
+        <label for="posterWidth">Width (in)</label>
+        <input id="posterWidth" class="slider-number" type="number" min="1" max="120" value="48" step="0.1">
+      </div>
+      <div class="slider-row">
+        <label for="posterHeight">Height (in)</label>
+        <input id="posterHeight" class="slider-number" type="number" min="1" max="120" value="35" step="0.1">
+      </div>
+      <div id="posterSizeValue" class="slider-value">48 × 35 in · 9600 × 7000 px at 200 DPI</div>
+    </div>
+    <div class="tool-group choice-group">
+      <label for="flagBorder">Dividing lines</label>
+      <select id="flagBorder">
+        <option value="none">No border</option>
+        <option value="white">White border</option>
+        <option value="black">Black border</option>
+      </select>
+    </div>
+    <div class="tool-group choice-group">
+      <div class="label">Flag order</div>
+      <label class="checkbox-label" for="reverseOrder"><input id="reverseOrder" type="checkbox"> Reverse order</label>
+    </div>
+  </section>
   <main>
     <section class="controls" aria-label="Country selection">
       <label for="search">Find a country</label>
@@ -143,35 +238,6 @@
         <button id="selectVisible" type="button">Select visible</button>
         <button id="clear" class="secondary" type="button">Clear all</button>
       </div>
-      <div class="size-controls" aria-label="Global flag scale control">
-        <div class="label">Global flag scale</div>
-        <div class="slider-row">
-          <label for="flagScale">Scale</label>
-          <input id="flagScale" type="range" min="25" max="800" value="100" step="0.1">
-          <input id="flagScaleNumber" class="slider-number" type="number" min="25" max="800" value="100" step="0.1" aria-label="Scale percentage">
-          <output id="flagScaleValue" class="slider-value" for="flagScale">100% · 245 × 184 px</output>
-        </div>
-        <div class="size-controls" aria-label="Poster size controls">
-          <div class="label">Final poster size</div>
-          <div class="slider-row">
-            <label for="posterWidth">Width (in)</label>
-            <input id="posterWidth" class="slider-number" type="number" min="1" max="120" value="48" step="0.1">
-          </div>
-          <div class="slider-row">
-            <label for="posterHeight">Height (in)</label>
-            <input id="posterHeight" class="slider-number" type="number" min="1" max="120" value="35" step="0.1">
-          </div>
-          <div id="posterSizeValue" class="slider-value">48 × 35 in · 9600 × 7000 px at 200 DPI</div>
-        </div>
-        <div class="slider-row">
-          <label for="flagBorder">Dividing lines</label>
-          <select id="flagBorder">
-            <option value="none">No border</option>
-            <option value="white">White border</option>
-            <option value="black">Black border</option>
-          </select>
-        </div>
-      </div>
       <div id="count" class="count" aria-live="polite"></div>
       <div id="countryList" class="country-list"></div>
       <p class="help">Flags are placed in alphabetical order from the top-left, down the left edge, across the bottom, and up the right edge. Use the scale slider to resize every flag proportionally. The final artwork remains exactly 48:35.</p>
@@ -179,7 +245,13 @@
     <section class="preview-panel">
       <div class="preview-heading">
         <h2>Poster preview</h2>
-        <button id="download" type="button">Download PNG (9600 × 7000)</button>
+        <div class="export-actions">
+          <button id="downloadPng" type="button">Download PNG (9600 × 7000)</button>
+          <details class="export-menu">
+            <summary aria-label="More export options">▾</summary>
+            <div class="export-dropdown"><button id="downloadSvg" type="button">Download SVG</button></div>
+          </details>
+        </div>
       </div>
       <div class="poster-wrap"><svg id="poster" viewBox="0 0 9600 7000" role="img" aria-label="Generated flag border"></svg></div>
     </section>
@@ -192,7 +264,7 @@
     let posterWidthInches = 48;
     let posterHeightInches = 35;
     const DEFAULT_SELECTED_CODES = [
-      "us", "at", "be", "br", "bg", "cn", "cr", "cz", "et", "fj",
+      "us", "at", "be", "br", "bg", "cn", "co", "cr", "cz", "et", "fj",
       "fr", "de", "gd", "in", "ir", "ie", "il", "it", "jp", "kr",
       "mx", "np", "nl", "ng", "no", "pk", "ph", "pl", "pr", "ru",
       "sa", "za", "se", "ch", "tw", "tz", "tt", "tr", "ua", "gb"
@@ -210,7 +282,8 @@
     const posterWidth = document.querySelector("#posterWidth");
     const posterHeight = document.querySelector("#posterHeight");
     const posterSizeValue = document.querySelector("#posterSizeValue");
-    const downloadButton = document.querySelector("#download");
+    const downloadPngButton = document.querySelector("#downloadPng");
+    const reverseOrder = document.querySelector("#reverseOrder");
 
     function canvasWidth() {
       return Math.max(1, Math.round(posterWidthInches * DPI));
@@ -295,6 +368,7 @@
 
     function renderPoster() {
       const selected = state.countries.filter(country => state.selected.has(country.code));
+      if (reverseOrder.checked) selected.reverse();
       const { tileWidth, tileHeight, slots } = borderSlots(selected.length);
       const borderColor = flagBorder.value === "none" ? null : flagBorder.value;
       const images = selected.map((country, index) => {
@@ -328,7 +402,7 @@
       const width = canvasWidth();
       const height = canvasHeight();
       posterSizeValue.textContent = `${posterWidthInches} × ${posterHeightInches} in · ${width} × ${height} px at ${DPI} DPI`;
-      downloadButton.textContent = `Download PNG (${width} × ${height})`;
+      downloadPngButton.textContent = `Download PNG (${width} × ${height})`;
       renderPoster();
     }
     posterWidth.addEventListener("change", updatePosterSize);
@@ -353,6 +427,7 @@
     flagScaleNumber.addEventListener("input", () => applyTypedScale(false));
     flagScaleNumber.addEventListener("change", () => applyTypedScale(true));
     flagBorder.addEventListener("change", renderPoster);
+    reverseOrder.addEventListener("change", renderPoster);
     document.querySelector("#clear").addEventListener("click", () => {
       state.selected.clear();
       renderList();
@@ -365,8 +440,18 @@
       renderList();
       renderPoster();
     });
-    document.querySelector("#download").addEventListener("click", () => {
-      const source = new XMLSerializer().serializeToString(poster);
+    function svgSource() {
+      return new XMLSerializer().serializeToString(poster);
+    }
+    function downloadFile(blob, filename) {
+      const link = document.createElement("a");
+      link.download = filename;
+      link.href = URL.createObjectURL(blob);
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    }
+    document.querySelector("#downloadPng").addEventListener("click", () => {
+      const source = svgSource();
       const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const image = new Image();
@@ -379,11 +464,7 @@
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
         URL.revokeObjectURL(url);
         canvas.toBlob(png => {
-          const link = document.createElement("a");
-          link.download = "rise-flag-border-48x35-200dpi.png";
-          link.href = URL.createObjectURL(png);
-          link.click();
-          setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+          downloadFile(png, "rise-flag-border.png");
         }, "image/png");
       };
       image.onerror = () => {
@@ -391,6 +472,9 @@
         alert("The PNG could not be generated. Make sure the flag-icons-main folder remains next to this HTML file.");
       };
       image.src = url;
+    });
+    document.querySelector("#downloadSvg").addEventListener("click", () => {
+      downloadFile(new Blob([svgSource()], { type: "image/svg+xml;charset=utf-8" }), "rise-flag-border.svg");
     });
 
     state.countries = COUNTRY_DATA
